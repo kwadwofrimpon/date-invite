@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Special Question</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #ffe6e9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      overflow: hidden;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      position: relative;
+      width: 320px;
+    }
+    .card img {
+      width: 150px;
+      height: 150px;
+      border-radius: 15px;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+    h2 {
+      color: #333;
+      font-size: 22px;
+      margin-bottom: 25px;
+    }
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      position: relative;
+      height: 50px;
+    }
+    .btn {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    #yesBtn {
+      background-color: #ff4d6d;
+      color: white;
+    }
+    #noBtn {
+      background-color: #a8a8a8;
+      color: white;
+      position: absolute;
+      right: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1bTByOXB2b3F3b3R3bzRxMW0zdzU1aGNuNDN6Nm9xdmxreWpxMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Lq0h93752f6J9tijrh/giphy.gif" alt="Cute gif">
+    <h2>🌸 Will you go on a date with me? 🌸</h2>
+    <div class="btn-container">
+      <button class="btn" id="yesBtn" onclick="onYesClick()">YES 💕</button>
+      <button class="btn" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">no 🌸</button>
+    </div>
+  </div>
+
+  <script>
+    function moveButton() {
+      const noBtn = document.getElementById('noBtn');
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40);
+      
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = `${Math.max(20, x)}px`;
+      noBtn.style.top = `${Math.max(20, y)}px`;
+    }
+
+    function onYesClick() {
+      document.querySelector('.card').innerHTML = `
+        <h2>YAY! See you soon! 🎉❤️</h2>
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnZ2azIzeDByazF2d2N1MXZ1bWRkYm9pNDJzNzZwbjM0eHRjcGpsbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif" alt="Happy gif">
+      `;
+    }
+  </script>
+
+</body>
+</html>
