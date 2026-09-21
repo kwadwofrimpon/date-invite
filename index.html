@@ -96,6 +96,9 @@
 </head>
 <body>
 
+  <!-- Audio Element -->
+  <audio id="bgMusic" src="music.mp3" preload="auto" loop></audio>
+
   <!-- Screen 1: The Question -->
   <div class="card" id="mainCard">
     <h1>Will you go out with me? 🌹</h1>
@@ -167,6 +170,10 @@
     }
 
     function openPlanner() {
+      const music = document.getElementById('bgMusic');
+      if (music) {
+        music.play().catch(err => console.log("Audio play blocked:", err));
+      }
       document.getElementById('mainCard').classList.add('hidden');
       document.getElementById('detailsCard').classList.remove('hidden');
     }
