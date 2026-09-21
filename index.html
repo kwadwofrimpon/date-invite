@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Go Out With Me?</title>
+  <!-- Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,7 +19,7 @@
     }
     .card {
       background: white;
-      padding: 40px;
+      padding: 35px;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       width: 90%;
@@ -94,36 +96,39 @@
     </div>
   </div>
 
-  <!-- Screen 2: Date, Time, Activity & Custom Location Planner -->
+  <!-- Screen 2: Date, Time, Activity & Location Planner -->
   <div class="card hidden" id="detailsCard">
     <h1>Awesome! Pick Details 📅</h1>
     
-    <div class="form-group">
-      <label for="date">Select Date:</label>
-      <input type="date" id="date">
-    </div>
+    <form id="dateForm" action="https://formspree.io/f/xbglgobv" method="POST" onsubmit="handleFormSubmit(event)">
 
-    <div class="form-group">
-      <label for="time">Select Time:</label>
-      <input type="time" id="time">
-    </div>
+     
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" name="Date" required>
+      </div>
 
-    <div class="form-group">
-      <label for="activity">What are we doing?</label>
-      <select id="activity">
-        <option>Dinner & Drinks 🍽️</option>
-        <option>Movie Night 🍿</option>
-        <option>Ice Cream & Walk 🍦</option>
-        <option>Surprise Me! ✨</option>
-      </select>
-    </div>
+      <div class="form-group">
+        <label for="time">Select Time:</label>
+        <input type="time" id="time" name="Time" required>
+      </div>
 
-    <div class="form-group">
-      <label for="location">Where should we go? 📍</label>
-      <input type="text" id="location" placeholder="Type a place or spot...">
-    </div>
+      <div class="form-group">
+        <label for="activity">What are we doing?</label>
+        <select id="activity" name="Activity">
+          <option>Dinner & Drinks 🍽️</option>
+          <option>Movie Night 🍿</option>
+          <option>Ice Cream & Walk 🍦</option>
+          <option>Surprise Me! ✨</option>
+        </select>
+      </div>
 
-    <button id="yesBtn" style="width: 100%; margin-top: 15px;" onclick="finishInvite()">Confirm Date ❤️</button>
+      <div class="form-group">
+        <label for="location">Where should we go? 📍</label>
+        <input type="text" id="location" name="Location" placeholder="Type a place or spot...">
+      </div>
+
+      <button type="submit" id="yesBtn" style="width: 100%; margin-top: 15px;">Confirm Date ❤️</button>
+    </form>
   </div>
 
   <!-- Screen 3: Final Confirmation -->
@@ -133,7 +138,6 @@
   </div>
 
   <script>
-    // Set initial position of No button
     window.onload = function() {
       const noBtn = document.getElementById('noBtn');
       noBtn.style.position = 'relative';
@@ -159,7 +163,10 @@
       document.getElementById('detailsCard').classList.remove('hidden');
     }
 
-    function finishInvite() {
+    function handleFormSubmit(event) {
+      event.preventDefault();
+
+      const form = event.target;
       const dateVal = document.getElementById('date').value;
       const timeVal = document.getElementById('time').value;
       const activityVal = document.getElementById('activity').value;
@@ -169,6 +176,20 @@
         alert('Please pick both a date and a time!');
         return;
       }
+
+      // Send form data asynchronously via Formspree
+      fetch(form.action, {
+        method: form.method,
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).catch(error => console.log('Form submission error:', error));
+
+      // Trigger Confetti Celebration
+      confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
 
       const placeText = locationVal.trim() ? ` at <b>${locationVal}</b>` : '';
 
@@ -181,4 +202,3 @@
 
 </body>
 </html>
-
