@@ -3,94 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Special Question</title>
+  <title>Go Out With Me?</title>
   <style>
     body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffe6e9;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      background-color: #ffe6e9;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
       margin: 0;
-      overflow: hidden;
+      text-align: center;
     }
     .card {
       background: white;
       padding: 30px;
       border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 420px;
       position: relative;
-      width: 320px;
     }
-    .card img {
-      width: 150px;
-      height: 150px;
-      border-radius: 15px;
-      object-fit: cover;
-      margin-bottom: 15px;
+    h1 {
+      color: #ff4b6e;
+      font-size: 1.8rem;
     }
-    h2 {
-      color: #333;
-      font-size: 22px;
-      margin-bottom: 25px;
-    }
-    .btn-container {
+    .btn-group {
+      margin-top: 25px;
       display: flex;
       justify-content: center;
       gap: 20px;
-      position: relative;
-      height: 50px;
+      min-height: 50px;
     }
-    .btn {
-      padding: 12px 28px;
+    button {
+      padding: 12px 25px;
+      font-size: 1.1rem;
       border: none;
-      border-radius: 25px;
-      font-size: 16px;
-      font-weight: bold;
+      border-radius: 30px;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      font-weight: bold;
+      transition: transform 0.2s;
     }
     #yesBtn {
-      background-color: #ff4d6d;
+      background-color: #ff4b6e;
       color: white;
     }
     #noBtn {
-      background-color: #a8a8a8;
-      color: white;
+      background-color: #e0e0e0;
+      color: #333;
       position: absolute;
-      right: 40px;
+    }
+    .form-group {
+      margin: 15px 0;
+      text-align: left;
+    }
+    label {
+      display: block;
+      color: #555;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ffd1d7;
+      border-radius: 10px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1bTByOXB2b3F3b3R3bzRxMW0zdzU1aGNuNDN6Nm9xdmxreWpxMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Lq0h93752f6J9tijrh/giphy.gif" alt="Cute gif">
-    <h2>🌸 Will you go on a date with me? 🌸</h2>
-    <div class="btn-container">
-      <button class="btn" id="yesBtn" onclick="onYesClick()">YES 💕</button>
-      <button class="btn" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">no 🌸</button>
+  <div class="card" id="mainCard">
+    <h1>Will you go out with me? 🌹</h1>
+    <div class="btn-group">
+      <button id="yesBtn" onclick="showForm()">Yes!</button>
+      <button id="noBtn" onmouseover="moveButton()">No</button>
     </div>
+  </div>
+
+  <div class="card hidden" id="detailsCard">
+    <h1>Awesome! Pick a Date 📅</h1>
+    
+    <div class="form-group">
+      <label for="date">Select Date:</label>
+      <input type="date" id="date">
+    </div>
+
+    <div class="form-group">
+      <label for="time">Select Time:</label>
+      <input type="time" id="time">
+    </div>
+
+    <div class="form-group">
+      <label for="activity">What are we doing?</label>
+      <select id="activity">
+        <option>Dinner & Drinks 🍽️</option>
+        <option>Movie Night 🍿</option>
+        <option>Ice Cream & Walk 🍦</option>
+        <option>Surprise Me! ✨</option>
+      </select>
+    </div>
+
+    <button id="yesBtn" style="margin-top: 15px; width: 100%;" onclick="confirmDate()">Confirm Date ❤️</button>
+  </div>
+
+  <div class="card hidden" id="successCard">
+    <h1>It's a Date! 🎉</h1>
+    <p id="summaryText" style="font-size: 1.1rem; color: #444;"></p>
   </div>
 
   <script>
     function moveButton() {
-      const noBtn = document.getElementById('noBtn');
-      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40);
-      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40);
-      
-      noBtn.style.position = 'fixed';
-      noBtn.style.left = `${Math.max(20, x)}px`;
-      noBtn.style.top = `${Math.max(20, y)}px`;
+      const btn = document.getElementById('noBtn');
+      const x = Math.floor(Math.random() * (window.innerWidth - 100));
+      const y = Math.floor(Math.random() * (window.innerHeight - 50));
+      btn.style.left = x + 'px';
+      btn.style.top = y + 'px';
     }
 
-    function onYesClick() {
-      document.querySelector('.card').innerHTML = `
-        <h2>YAY! See you soon! 🎉❤️</h2>
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnZ2azIzeDByazF2d2N1MXZ1bWRkYm9pNDJzNzZwbjM0eHRjcGpsbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif" alt="Happy gif">
-      `;
+    function showForm() {
+      document.getElementById('mainCard').classList.add('hidden');
+      document.getElementById('detailsCard').classList.remove('hidden');
+    }
+
+    function confirmDate() {
+      const dateVal = document.getElementById('date').value;
+      const timeVal = document.getElementById('time').value;
+      const activityVal = document.getElementById('activity').value;
+
+      if (!dateVal || !timeVal) {
+        alert('Please pick both a date and a time!');
+        return;
+      }
+
+      document.getElementById('detailsCard').classList.add('hidden');
+      document.getElementById('successCard').classList.remove('hidden');
+      document.getElementById('summaryText').innerHTML = 
+        `Can't wait! See you on <b>${dateVal}</b> at <b>${timeVal}</b> for <b>${activityVal}</b>!`;
     }
   </script>
 
