@@ -4,9 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Go Out With Me?</title>
-  <!-- Confetti Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #ffe6e9;
@@ -14,35 +18,35 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
-      overflow: hidden;
+      overflow-x: hidden;
+      padding: 20px;
     }
     .card {
       background: white;
-      padding: 35px;
+      padding: 30px 25px;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 400px;
+      width: 100%;
+      max-width: 360px;
       text-align: center;
       position: relative;
     }
     h1 {
       color: #ff4b6e;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       margin-bottom: 20px;
     }
     .btn-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 20px;
+      gap: 15px;
       margin-top: 20px;
-      min-height: 60px;
+      min-height: 50px;
     }
     button {
-      padding: 12px 28px;
-      font-size: 1.1rem;
+      padding: 12px 24px;
+      font-size: 1rem;
       border: none;
       border-radius: 30px;
       cursor: pointer;
@@ -54,7 +58,7 @@
       color: white;
     }
     #yesBtn:hover {
-      transform: scale(1.08);
+      transform: scale(1.05);
     }
     #noBtn {
       background-color: #e0e0e0;
@@ -63,22 +67,27 @@
       z-index: 999;
     }
     .form-group {
-      margin: 15px 0;
+      margin-bottom: 15px;
       text-align: left;
     }
     label {
       display: block;
       color: #555;
       font-weight: 600;
-      margin-bottom: 5px;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
     }
     input, select {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       border: 2px solid #ffd1d7;
       border-radius: 10px;
-      box-sizing: border-box;
       font-size: 1rem;
+      outline: none;
+      background: #fff;
+    }
+    input:focus, select:focus {
+      border-color: #ff4b6e;
     }
     .hidden {
       display: none !important;
@@ -96,13 +105,12 @@
     </div>
   </div>
 
-  <!-- Screen 2: Date, Time, Activity & Location Planner -->
+  <!-- Screen 2: Details Form -->
   <div class="card hidden" id="detailsCard">
     <h1>Awesome! Pick Details 📅</h1>
     
     <form id="dateForm" action="https://formspree.io/f/xbglgobv" method="POST" onsubmit="handleFormSubmit(event)">
-
-     
+      <div class="form-group">
         <label for="date">Select Date:</label>
         <input type="date" id="date" name="Date" required>
       </div>
@@ -127,14 +135,14 @@
         <input type="text" id="location" name="Location" placeholder="Type a place or spot...">
       </div>
 
-      <button type="submit" id="yesBtn" style="width: 100%; margin-top: 15px;">Confirm Date ❤️</button>
+      <button type="submit" id="yesBtn" style="width: 100%; margin-top: 10px;">Confirm Date ❤️</button>
     </form>
   </div>
 
   <!-- Screen 3: Final Confirmation -->
   <div class="card hidden" id="successCard">
     <h1>It's a Date! 🎉</h1>
-    <p id="summaryText" style="font-size: 1.1rem; color: #444; margin-top: 15px;"></p>
+    <p id="summaryText" style="font-size: 1.05rem; color: #444; margin-top: 15px; line-height: 1.5;"></p>
   </div>
 
   <script>
@@ -147,7 +155,7 @@
       const noBtn = document.getElementById('noBtn');
       noBtn.style.position = 'fixed';
 
-      const padding = 50;
+      const padding = 40;
       const maxX = window.innerWidth - noBtn.offsetWidth - padding;
       const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
@@ -177,14 +185,12 @@
         return;
       }
 
-      // Send form data asynchronously via Formspree
       fetch(form.action, {
         method: form.method,
         body: new FormData(form),
         headers: { 'Accept': 'application/json' }
       }).catch(error => console.log('Form submission error:', error));
 
-      // Trigger Confetti Celebration
       confetti({
         particleCount: 120,
         spread: 70,
